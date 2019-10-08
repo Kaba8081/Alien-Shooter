@@ -81,16 +81,18 @@ class OtherPlayer(pygame.sprite.Sprite):
 
         self.label = Font.render(nickname, 1 ,(255, 255, 255))
         self.label_dimensions = self.label.get_width(), self.label.get_height()
-        self.label_pos = self.rect.centerx + self.label_dimensions[0]/2 , self.rect.centery + self.label_dimensions[1]/2
+        self.label_pos = self.rect.centerx - self.label_dimensions[0]/2 , self.rect.centery + self.label_dimensions[1]/2
         self.nickname = nickname
 
     def update(self, r, offset):
         self.rect.x, self.rect.y = -r[1][2][r[1][1].index(self.nickname)][0] + (OFFSET[0] * TILESIZE), -r[1][2][r[1][1].index(self.nickname)][1] + (OFFSET[1] * TILESIZE)
+
         self.rect.x += offset[0]
         self.rect.y += offset[1]
-        print("Debug] Other player pos: {0},{1}".format(self.rect.x, self.rect.y))
 
-    def draw_label(self):
+    def draw_label(self, offset):
+        self.label_pos = self.rect.centerx - self.label_dimensions[0]/2 , self.rect.centery + self.label_dimensions[1]/2
+
         screen.blit(self.label, (self.label_pos[0], self.label_pos[1]))
 
 class Player(pygame.sprite.Sprite):  # main player class
@@ -107,16 +109,26 @@ class Player(pygame.sprite.Sprite):  # main player class
         
         if speedx != 0:
             for tile in allTiles:
-                if tile.rect.left == self.rect.right + speedx or tile.rect.left == self.rect.right + speedx:
-                    pass
+                #if tile.rect.left == self.rect.right + speedx or tile.rect.left == self.rect.right + speedx:
+                #    pass
+                if self.rect.colliderect(tile.rect):
+                    #if speedx > 0: # Going right
+                    #    pass
+                    #if speedx < 0: # Going left
+                    #    self.rect.left = tile.rect.right
                 else:
                     MAP_OFFSET[0] += speedx
                     PLAYER_POS[0] += speedx
             
         if speedy != 0:
             for tile in allTiles:
-                if tile.rect.top == self.rect.bottom + speedy or tile.rect.bottom == self.rect.top + speedy:
-                    pass
+                #if tile.rect.top == self.rect.bottom + speedy or tile.rect.bottom == self.rect.top + speedy:
+                #    pass
+                if self.rect.colliderect(tile.rect):
+                    #if speedy > 0: # Going up
+                    #    self.rect.top = tile.rect.bottom
+                    #if speedy < 0: # Going down
+                    #    self.rect.bottom = tile.rect.top
                 else:
                     MAP_OFFSET[1] += speedy
                     PLAYER_POS[1] += speedy
