@@ -108,30 +108,35 @@ class Player(pygame.sprite.Sprite):  # main player class
         speedy = speedy / SPEED_DIVIDE
         
         if speedx != 0:
+            colliding = False
             for tile in allTiles:
                 #if tile.rect.left == self.rect.right + speedx or tile.rect.left == self.rect.right + speedx:
                 #    pass
                 if self.rect.colliderect(tile.rect):
-                    #if speedx > 0: # Going right
-                    #    pass
-                    #if speedx < 0: # Going left
-                    #    self.rect.left = tile.rect.right
-                else:
-                    MAP_OFFSET[0] += speedx
-                    PLAYER_POS[0] += speedx
+                    colliding = True
+                    if speedx > 0: # Going right
+                        pass
+                    if speedx < 0: # Going left
+                        self.rect.left = tile.rect.right
+            if not colliding:
+                MAP_OFFSET[0] += speedx
+                PLAYER_POS[0] += speedx
             
         if speedy != 0:
+            colliding = False
             for tile in allTiles:
                 #if tile.rect.top == self.rect.bottom + speedy or tile.rect.bottom == self.rect.top + speedy:
                 #    pass
                 if self.rect.colliderect(tile.rect):
-                    #if speedy > 0: # Going up
-                    #    self.rect.top = tile.rect.bottom
-                    #if speedy < 0: # Going down
-                    #    self.rect.bottom = tile.rect.top
-                else:
-                    MAP_OFFSET[1] += speedy
-                    PLAYER_POS[1] += speedy
+                    colliding = True
+                    if speedy > 0: # Going up
+                        self.rect.top = tile.rect.bottom
+                    #    self.rect.top -= 1
+                    if speedy < 0: # Going down
+                        self.rect.bottom = tile.rect.top
+            if not colliding:
+                MAP_OFFSET[1] += speedy
+                PLAYER_POS[1] += speedy
 
 class Button():  # menu button class
     def __init__(self, x, y, text, text_x, text_y, color, font, return_value, width=140, height=60):
